@@ -53,4 +53,18 @@ public class LoginPage extends GeneralPage {
     public String getLoginErrorMessage() {
         return Constant.WEBDRIVER.findElement(lblLoginError).getText();
     }
+
+    public void loginInvalid(String username, String password) {
+        getTxtUsername().clear();
+        getTxtUsername().sendKeys(username);
+
+        getTxtPassword().clear();
+        getTxtPassword().sendKeys(password);
+
+        getBtnLogin().click();
+    }
+
+//    tc5
+
+
 }
