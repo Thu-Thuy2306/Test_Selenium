@@ -1,20 +1,24 @@
 package pageobjects;
 
+import common.Constant;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import common.Constant;
 
 public class GeneralPage {
-    // 1. Locators: Chỉ giữ lại các nút cơ bản
     private final By tabLogin = By.xpath("//span[text()='Login']");
+    private final By tabBookTicket = By.xpath("//span[text()='Book ticket']");
     private final By tabLogout = By.xpath("//span[text()='Log out']");
     private final By tabMyTicket = By.xpath("//span[text()='My ticket']");
     private final By tabChangePassword = By.xpath("//span[text()='Change password']");
+    private final By tabRegister = By.xpath("//a[@href='/Account/Register.cshtml']");
     private final By lblWelcomeMessage = By.xpath("//div[@class='account']/strong");
 
-    // 2. Elements: Các hàm lấy ra Web Element cơ bản
     public WebElement getTabLogin() {
         return Constant.WEBDRIVER.findElement(tabLogin);
+    }
+
+    public WebElement getTabBookTicket() {
+        return Constant.WEBDRIVER.findElement(tabBookTicket);
     }
 
     public WebElement getTabLogout() {
@@ -33,32 +37,29 @@ public class GeneralPage {
         return Constant.WEBDRIVER.findElement(lblWelcomeMessage);
     }
 
-    private final By tabRegister = By.xpath("//a[@href='/Account/Register.cshtml']");
-
-    // 3. Methods: Các hành động chung
     public String getWelcomeMessage() {
         try {
-            return Constant.WEBDRIVER.findElement(By.xpath("//div[@class='account']/strong")).getText();
+            return getLblWelcomeMessage().getText();
         } catch (org.openqa.selenium.StaleElementReferenceException e) {
-            // Nếu bị cũ (Stale), bắt Selenium tìm lại lần nữa ngay lập tức
-            return Constant.WEBDRIVER.findElement(By.xpath("//div[@class='account']/strong")).getText();
+            return getLblWelcomeMessage().getText();
         }
     }
 
-    // Nhấn nút Login -> Chuyển sang trang Login -> Trả về đối tượng LoginPage
     public LoginPage gotoLoginPage() {
-        this.getTabLogin().click();
+        getTabLogin().click();
         return new LoginPage();
     }
 
-    //tc9
+    public LoginPage gotoBookTicketPage() {
+        getTabBookTicket().click();
+        return new LoginPage();
+    }
 
     public ChangePasswordPage gotoChangePasswordPage() {
-        this.getTabChangePassword().click();
+        getTabChangePassword().click();
         return new ChangePasswordPage();
     }
 
-    //tc10
     public RegisterPage gotoRegisterPage() {
         Constant.WEBDRIVER.findElement(tabRegister).click();
         return new RegisterPage();
