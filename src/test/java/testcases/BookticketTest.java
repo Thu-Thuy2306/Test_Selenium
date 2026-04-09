@@ -13,6 +13,8 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import pageobjects.HomePage;
+import pageobjects.LoginPage;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -27,6 +29,17 @@ public class BookticketTest {
         Constant.WEBDRIVER = new ChromeDriver();
         Constant.WEBDRIVER.manage().window().maximize();
         Constant.WEBDRIVER.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+    }
+
+    @Test
+    public void TC04() {
+        HomePage homePage = new HomePage();
+        homePage.open();
+
+        LoginPage loginPage = homePage.gotoBookTicketPage();
+
+        Assert.assertTrue(loginPage.isLoginFormDisplayed(),
+                "Login page is not displayed when an un-logged user clicks Book ticket.");
     }
 
     @Test
