@@ -11,7 +11,9 @@ import common.Constant;
 import pageobjects.HomePage;
 import pageobjects.LoginPage;
 
+
 import org.openqa.selenium.JavascriptExecutor;
+import pageobjects.RegisterPage;
 
 public class RegisterTest {
     @BeforeMethod
@@ -100,6 +102,33 @@ public class RegisterTest {
 
 
         System.out.println("TC11 PASS");
+    }
+
+    @Test
+    public void TC10() {
+
+        System.out.println("TC10 - User can't create account when Confirm password is not same as Password");
+
+        HomePage homePage = new HomePage();
+        homePage.open();
+
+        // Bước 2: vào trang Register
+        RegisterPage registerPage = homePage.gotoRegisterPage();
+
+        // Tạo dữ liệu
+        String email = "user" + System.currentTimeMillis() + "@mail.com";
+        String password = "123456789";
+        String confirmPassword = "987654321"; // KHÁC password
+        String pid = "123456789";
+
+        // Bước 3 + 4: nhập dữ liệu sai confirm password
+        registerPage.registerAccount(email, password, confirmPassword, pid);
+
+
+        Assert.assertEquals(
+                registerPage.getRegisterErrorMessage(),
+                "There're errors in the form. Please correct the errors and try again."
+        );
     }
 
 }
