@@ -33,6 +33,8 @@ public class GeneralPage {
         return Constant.WEBDRIVER.findElement(lblWelcomeMessage);
     }
 
+    private final By tabRegister = By.xpath("//a[@href='/Account/Register.cshtml']");
+
     // 3. Methods: Các hành động chung
     public String getWelcomeMessage() {
         try {
@@ -47,5 +49,18 @@ public class GeneralPage {
     public LoginPage gotoLoginPage() {
         this.getTabLogin().click();
         return new LoginPage();
+    }
+
+    //tc9
+
+    public ChangePasswordPage gotoChangePasswordPage() {
+        this.getTabChangePassword().click();
+        return new ChangePasswordPage();
+    }
+
+    //tc10
+    public RegisterPage gotoRegisterPage() {
+        Constant.WEBDRIVER.findElement(tabRegister).click();
+        return new RegisterPage();
     }
 }
