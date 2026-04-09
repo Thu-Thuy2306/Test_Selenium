@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Random;
 
 
+
+
 public class BookTicketPage extends GeneralPage {
     private final By selectDepartFrom = By.xpath("//select[@name='DepartStation']");
     private final By selectArriveAt = By.xpath("//select[@name='ArriveStation']");
@@ -25,10 +27,24 @@ public class BookTicketPage extends GeneralPage {
     private final By seatTypeField = By.xpath("//div[@id='content']//td[3]");
     private final By amountField = By.xpath("//div[@id='content']//td[7]");
     private final By successMessage = By.xpath("//div[@id='content']//h1[contains(text(),'Ticket booked successfully!')]");
+    private final By drpDepartDate = By.name("Date");
+    private final By drpDepartFrom = By.name("DepartStation");
+    private final By drpSeatType = By.name("SeatType");
+    private final By drpTicketAmount = By.name("TicketAmount");
+
+
 
     public String getDepartDate() {
         WebElement departDateElement = Constant.WEBDRIVER.findElement(departDateField);
         return departDateElement.getText();
+    }
+
+    public void bookTicket() {
+        new Select(Constant.WEBDRIVER.findElement(drpDepartDate)).selectByIndex(1);
+        new Select(Constant.WEBDRIVER.findElement(drpDepartFrom)).selectByIndex(1);
+        new Select(Constant.WEBDRIVER.findElement(drpSeatType)).selectByIndex(1);
+        new Select(Constant.WEBDRIVER.findElement(drpTicketAmount)).selectByVisibleText("1");
+        Constant.WEBDRIVER.findElement(btnBookTicket).click();
     }
 
     public String getDepartStation() {

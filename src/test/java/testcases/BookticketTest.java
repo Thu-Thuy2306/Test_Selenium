@@ -13,10 +13,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import pageobjects.BookTicketPage;
-import pageobjects.HomePage;
-import pageobjects.LoginPage;
-import pageobjects.TimeTable;
+import pageobjects.*;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -234,4 +231,29 @@ public class BookticketTest {
             Constant.WEBDRIVER.quit();
         }
     }
+    @Test
+    public void TC16() {
+        System.out.println("TC16 - User can cancel a ticket");
+
+        HomePage homePage = new HomePage();
+        homePage.open();
+
+        LoginPage loginPage = homePage.gotoLoginPage();
+        loginPage.login(Constant.USERNAME, Constant.PASSWORD);
+
+        BookTicketPage bookTicketPage = homePage.gotoBookticket();
+        bookTicketPage.bookTicket();
+
+        MyTicketPage myTicketPage = homePage.gotoMyticket();
+
+        int ticketCountBefore = myTicketPage.getTicketCount();
+
+        myTicketPage.cancelFirstTicket();
+
+        int ticketCountAfter = myTicketPage.getTicketCount();
+
+        Assert.assertEquals(ticketCountAfter, ticketCountBefore - 1,
+                "Ticket is not cancelled successfully");
+    }
 }
+
