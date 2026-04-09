@@ -13,8 +13,10 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import pageobjects.BookTicketPage;
 import pageobjects.HomePage;
 import pageobjects.LoginPage;
+import pageobjects.TimeTable;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -179,7 +181,52 @@ public class BookticketTest {
 
         return chosen;
     }
+    @Test
+    public void TC15() {
+        String username = "thanhhanh0104@gmail.com";
+        String password = "Thanhhanh0104@";
 
+        System.out.println("TC15 - User can open \"Book ticket\" page by clicking on \"Book ticket\" link in \"Train timetable\" page");
+
+        Constant.WEBDRIVER.get("http://railwayb1.somee.com");
+
+        Constant.WEBDRIVER.findElement(By.linkText("Login")).click();
+        Constant.WEBDRIVER.findElement(By.id("username")).sendKeys(username);
+        Constant.WEBDRIVER.findElement(By.id("password")).sendKeys(password);
+        Constant.WEBDRIVER.findElement(By.cssSelector("input[type='submit']")).click();
+
+        Constant.WEBDRIVER.findElement(By.linkText("Timetable")).click();
+
+        WebElement bookTicketLink = Constant.WEBDRIVER.findElement(
+                By.xpath("//tr[td[normalize-space()='Huế'] and td[normalize-space()='Sài Gòn']]//a[normalize-space()='book ticket']")
+        );
+
+        ((JavascriptExecutor) Constant.WEBDRIVER)
+                .executeScript("arguments[0].scrollIntoView({block:'center'});", bookTicketLink);
+
+        try {
+            new WebDriverWait(Constant.WEBDRIVER, Duration.ofSeconds(10))
+                    .until(ExpectedConditions.elementToBeClickable(bookTicketLink))
+                    .click();
+        } catch (Exception e) {
+            ((JavascriptExecutor) Constant.WEBDRIVER)
+                    .executeScript("arguments[0].click();", bookTicketLink);
+        }
+
+        Assert.assertTrue(
+                Constant.WEBDRIVER.getCurrentUrl().contains("BookTicketPage.cshtml"),
+                "Book ticket page is not loaded."
+        );
+
+        Select departDropdown = new Select(Constant.WEBDRIVER.findElement(By.name("DepartStation")));
+        Select arriveDropdown = new Select(Constant.WEBDRIVER.findElement(By.name("ArriveStation")));
+
+        String actualDepart = departDropdown.getFirstSelectedOption().getText().trim();
+        String actualArrive = arriveDropdown.getFirstSelectedOption().getText().trim();
+
+        Assert.assertEquals(actualDepart, "Huế", "Depart from value is incorrect.");
+        Assert.assertEquals(actualArrive, "Sài Gòn", "Arrive at value is incorrect.");
+    }
     @AfterMethod
     public void afterMethod() {
         System.out.println("== Post-condition: Đóng trình duyệt ==");
