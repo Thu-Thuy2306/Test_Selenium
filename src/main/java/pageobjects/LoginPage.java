@@ -2,6 +2,8 @@ package pageobjects;
 
 import common.Constant;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 
 public class LoginPage extends GeneralPage {
@@ -28,7 +30,7 @@ public class LoginPage extends GeneralPage {
         getTxtUsername().sendKeys(username);
         getTxtPassword().clear();
         getTxtPassword().sendKeys(password);
-        getBtnLogin().click();
+        clickLoginButton();
         return new HomePage();
     }
 
@@ -56,6 +58,15 @@ public class LoginPage extends GeneralPage {
         getTxtUsername().sendKeys(username);
         getTxtPassword().clear();
         getTxtPassword().sendKeys(password);
-        getBtnLogin().click();
+        clickLoginButton();
+    }
+
+    private void clickLoginButton() {
+        WebElement loginButton = getBtnLogin();
+        try {
+            loginButton.click();
+        } catch (ElementClickInterceptedException e) {
+            ((JavascriptExecutor) Constant.WEBDRIVER).executeScript("arguments[0].click();", loginButton);
+        }
     }
 }
