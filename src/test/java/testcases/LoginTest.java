@@ -103,4 +103,32 @@ public class LoginTest {
         System.out.println("TC12 ĐÃ PASS (Đã vượt qua bước gửi mail và kiểm tra thông báo lỗi thành công)");
     }
 
+    @Test
+    public void TC05() {
+        System.out.println("TC05 - System shows message when user enters wrong password several times");
+
+        HomePage homePage = new HomePage();
+        homePage.open();
+
+        LoginPage loginPage = homePage.gotoLoginPage();
+
+        String wrongPassword = "123456789";
+
+        for (int i = 1; i <= 4; i++) {
+            loginPage.loginInvalid(Constant.USERNAME, wrongPassword);
+        }
+
+        String actualMsg = loginPage.getLoginErrorMessage();
+        String expectedMsg = "You have used 4 out of 5 login attempts. After all 5 have been used, you will be unable to login for 15 minutes.";
+
+        System.out.println("Actual message: " + actualMsg);
+        System.out.println("Expected message: " + expectedMsg);
+
+        Assert.assertEquals(actualMsg, expectedMsg,
+                "Warning message after 4 failed login attempts is not displayed as expected.");
+    }
+
+
+
+
 }
