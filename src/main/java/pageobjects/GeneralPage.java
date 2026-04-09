@@ -8,6 +8,8 @@ public class GeneralPage {
     // 1. Locators: Chỉ giữ lại các nút cơ bản
     private final By tabLogin = By.xpath("//span[text()='Login']");
     private final By tabLogout = By.xpath("//span[text()='Log out']");
+    private final By tabMyTicket = By.xpath("//span[text()='My ticket']");
+    private final By tabChangePassword = By.xpath("//span[text()='Change password']");
     private final By lblWelcomeMessage = By.xpath("//div[@class='account']/strong");
 
     // 2. Elements: Các hàm lấy ra Web Element cơ bản
@@ -17,6 +19,14 @@ public class GeneralPage {
 
     public WebElement getTabLogout() {
         return Constant.WEBDRIVER.findElement(tabLogout);
+    }
+
+    public WebElement getTabMyTicket() {
+        return Constant.WEBDRIVER.findElement(tabMyTicket);
+    }
+
+    public WebElement getTabChangePassword() {
+        return Constant.WEBDRIVER.findElement(tabChangePassword);
     }
 
     protected WebElement getLblWelcomeMessage() {

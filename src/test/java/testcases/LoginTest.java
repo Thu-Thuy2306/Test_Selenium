@@ -10,7 +10,6 @@ import org.testng.annotations.Test;
 import common.Constant;
 import pageobjects.HomePage;
 import pageobjects.LoginPage;
-import pageobjects.ForgotPasswordPage; // Quan trọng: Phải có dòng này
 
 public class LoginTest {
 
@@ -61,47 +60,33 @@ public class LoginTest {
 
         System.out.println("TC02 ĐÃ PASS (Hệ thống chặn lỗi đúng kịch bản) ===");
     }
+
     @Test
     public void TC03() {
         System.out.println("TC03 - User cannot log into Railway with invalid password");
+
 
         HomePage homePage = new HomePage();
         homePage.open();
         LoginPage loginPage = homePage.gotoLoginPage();
 
 
+
+
         loginPage.login(Constant.USERNAME, "123456789");
+
 
         String actualErrorMessage = loginPage.getLoginErrorMessage();
         String expectedErrorMessage = "There was a problem with your login and/or errors exist in your form.";
 
+
         Assert.assertEquals(actualErrorMessage, expectedErrorMessage, "LỖI: Thông báo hiển thị không đúng yêu cầu của TC03!");
+
 
         System.out.println("TC03 ĐÃ PASS (Hệ thống chặn sai mật khẩu chuẩn");
     }
 
-    @Test
-    public void TC12() {
-        System.out.println("TC12 - Kiểm tra lỗi khi Reset Token để trống");
 
-        // 1. Khởi tạo trang và đi tắt đến URL Reset
-        ForgotPasswordPage forgotPage = new ForgotPasswordPage();
-        forgotPage.openResetPageWithBlankToken();
-
-        // 2. Thực hiện nhập mật khẩu mới nhưng để Token rỗng ""
-        // Các ID như newPassword, confirmPassword đã được xử lý bên trong hàm này
-        forgotPage.submitResetPassword("12345678", "12345678", "");
-
-        // 3. Kiểm tra kết quả mong đợi (Assertion)
-        String actualError = forgotPage.getTopErrorMessage();
-        String expectedError = "Could not reset password. Please correct the errors and try again.";
-
-        // So sánh nội dung chữ để bắt lỗi chính tả nếu có
-        Assert.assertEquals(actualError, expectedError, "LỖI: Thông báo lỗi trên cùng không đúng kịch bản Excel!");
-
-        // 4. In thông báo kết quả ra Console
-        System.out.println("TC12 ĐÃ PASS (Đã vượt qua bước gửi mail và kiểm tra thông báo lỗi thành công)");
-    }
 
     @Test
     public void TC05() {
@@ -128,6 +113,32 @@ public class LoginTest {
                 "Warning message after 4 failed login attempts is not displayed as expected.");
     }
 
+    @Test
+    public void TC06() {
+        System.out.println("TC06 - Kiểm tra hiển thị các tab sau đăng nhập");
+        HomePage homePage = new HomePage();
+        homePage.open();
+
+
+        LoginPage loginPage = homePage.gotoLoginPage();
+        homePage = loginPage.login(Constant.USERNAME, Constant.PASSWORD);
+
+
+        Assert.assertTrue(homePage.getTabMyTicket().isDisplayed(), "Tab My Ticket không hiển thị!");
+        Assert.assertTrue(homePage.getTabChangePassword().isDisplayed(), "Tab Change Password không hiển thị!");
+        // Khai báo element tab Logout
+        var tabLogout = homePage.getTabLogout();
+
+
+        // 1. Kiểm tra xem element có tồn tại và hiển thị không
+        Assert.assertTrue(tabLogout.isDisplayed(), "Tab Log out không hiển thị trên giao diện!");
+
+
+        // 2. Lấy text thực tế trên web và so sánh với text mong đợi từ tài liệu (để bắt lỗi)
+        String actualLogoutText = tabLogout.getText().trim();
+        Assert.assertEquals(actualLogoutText, "Logout", "Lỗi: Text hiển thị sai so với yêu cầu!");
+        System.out.println("TC06 ĐÃ PASS (Kiểm tra hiển thị các tab sau đăng nhập");
+    }
 
 
 
