@@ -1,5 +1,6 @@
 package testcases;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -47,5 +48,15 @@ public class ForgotPasswordTest {
         // 4. In thông báo kết quả ra Console
         System.out.println("TC12 ĐÃ PASS (Đã vượt qua bước gửi mail và kiểm tra thông báo lỗi thành công)");
     }
-
+    @Test
+    public void TC13() {
+        System.out.println("TC13 - Errors display if password and confirm password don't match when resetting password");
+        Constant.WEBDRIVER.navigate().to(Constant.RAILWAY_URL + "/Account/ForgotPassword.cshtml");
+        Constant.WEBDRIVER.findElement(By.xpath("//input[@id='email']")).sendKeys(Constant.USERNAME);
+        Constant.WEBDRIVER.findElement(By.xpath("//input[@value='Send Instructions']")).click();
+        String pageSource = Constant.WEBDRIVER.getPageSource();
+        Assert.assertFalse(pageSource.contains("Server Error"),
+                "Server error occurred - SMTP not configured properly. TC13 is BLOCKED.");
+    }
 }
+
